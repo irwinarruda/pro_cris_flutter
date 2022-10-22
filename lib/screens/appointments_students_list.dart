@@ -9,8 +9,20 @@ import 'package:pro_cris_flutter/screens/students_list.dart';
 
 import 'package:pro_cris_flutter/stores/auth_controller.dart';
 
-class AppointmentsStudentsList extends StatelessWidget {
+class AppointmentsStudentsList extends StatefulWidget {
+  @override
+  State<AppointmentsStudentsList> createState() =>
+      _AppointmentsStudentsListState();
+}
+
+class _AppointmentsStudentsListState extends State<AppointmentsStudentsList> {
   final _authController = AuthController();
+
+  Future<void> onSignOut() async {
+    final navigator = Navigator.of(context);
+    await _authController.signOut();
+    navigator.pushReplacementNamed('/sign_in');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +30,7 @@ class AppointmentsStudentsList extends StatelessWidget {
       menuItems: [
         ProCrisMenuItem(
           title: 'Sair',
-          onPressed: () async {
-            await _authController.signOut();
-            // ignore: use_build_context_synchronously
-            Navigator.pushReplacementNamed(context, '/sign_in');
-          },
+          onPressed: onSignOut,
         )
       ],
       tabs: [

@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'package:pro_cris_flutter/components/atoms/button.dart';
 import 'package:pro_cris_flutter/components/atoms/dismiss_keyboard.dart';
@@ -8,10 +9,28 @@ import 'package:pro_cris_flutter/components/atoms/link.dart';
 import 'package:pro_cris_flutter/components/molecules/student_card.dart';
 import 'package:pro_cris_flutter/components/molecules/toggle_info.dart';
 import 'package:pro_cris_flutter/components/templates/pro_cris_modal.dart';
+import 'package:pro_cris_flutter/stores/student_controller.dart';
 
 import 'package:pro_cris_flutter/styles/pro_cris_colors.dart';
 
-class StudentsList extends StatelessWidget {
+class StudentsList extends StatefulWidget {
+  @override
+  State createState() => _StudentsListState();
+}
+
+class _StudentsListState extends State<StudentsList> {
+  final _studentController = StudentController();
+
+  Future<void> onRefreshStudents() async {
+    await _studentController.listStudents();
+  }
+
+  @override
+  initState() {
+    super.initState();
+    onRefreshStudents();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -39,38 +58,40 @@ class StudentsList extends StatelessWidget {
                 child: Material(
                   child: RefreshIndicator(
                     color: ProCrisColors.gold,
-                    onRefresh: () async {},
-                    child: ListView(
-                      padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                      scrollDirection: Axis.vertical,
-                      children: [
-                        StudentCard(
-                          color: ProCrisColors.custom['green'],
-                          onPressed: () {},
-                          onConfigPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/students_management',
-                            );
-                          },
-                        ),
-                        SizedBox(height: 10),
-                        StudentCard(
-                          color: ProCrisColors.custom['red'],
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => ModalSummary(),
-                            );
-                          },
-                          onConfigPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/students_management',
-                            );
-                          },
-                        ),
-                      ],
+                    onRefresh: onRefreshStudents,
+                    child: Observer(
+                      builder: (context) => ListView(
+                        padding: EdgeInsets.only(top: 10, left: 16, right: 16),
+                        scrollDirection: Axis.vertical,
+                        children: [
+                          for (var index = 0;
+                              index < _studentController.students.length;
+                              index++) ...[
+                            if (index != 0) SizedBox(height: 10),
+                            StudentCard(
+                              color: ProCrisColors.fromHex(
+                                _studentController.students[index].color,
+                              ),
+                              name: _studentController.students[index].name,
+                              nameCaregiver: _studentController
+                                  .students[index].nameCaregiver,
+                              avatar: _studentController.students[index].avatar,
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ModalSummary(),
+                                );
+                              },
+                              onConfigPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/students_management',
+                                );
+                              },
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -284,6 +305,8 @@ class ModalAppointmentsSummary extends StatelessWidget {
     );
   }
 
+  final _studentController = StudentController();
+
   @override
   Widget build(BuildContext context) {
     return ProCrisModal(
@@ -321,15 +344,8 @@ class ModalAppointmentsSummary extends StatelessWidget {
               title: 'Ver recibo',
               alignment: Alignment.centerRight,
               onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20)),
-                  ),
-                  isScrollControlled: true,
-                  builder: (context) => ModalBilling(),
-                );
+                print('cheguei aqui');
+                _studentController.onModalBillingOpen();
               },
             ),
             SizedBox(width: 16),
@@ -349,6 +365,14 @@ class ModalAppointmentsSummary extends StatelessWidget {
               onPressed: () {},
             ),
           ],
+        ),
+        Observer(
+          builder: (_) => ModalBilling(
+            isOpen: _studentController.isModalBillingOpen,
+            onClose: () {
+              _studentController.onModalBillingClose();
+            },
+          ),
         )
       ],
     );
@@ -356,8 +380,27 @@ class ModalAppointmentsSummary extends StatelessWidget {
 }
 
 class ModalBilling extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  ModalBilling({super.key, bool? isOpen, void Function()? onClose}) {
+    this.isOpen = isOpen ?? false;
+    this.onClose = onClose ?? () {};
+  }
+
+  bool? isOpen;
+  void Function()? onClose;
+
+  Future<void> createModalBottomSheet(context) async {
+    await showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true,
+      builder: (context) => _buildModalBilling(context),
+    );
+    onClose!();
+  }
+
+  Widget _buildModalBilling(BuildContext context) {
     final height = MediaQuery.of(context).size.height * 0.5;
     return DismissKeyboard(
       child: Container(
@@ -400,5 +443,16 @@ class ModalBilling extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('isOpen! $isOpen');
+    if (isOpen!) {
+      createModalBottomSheet(context);
+    } else {
+      onClose!();
+    }
+    return SizedBox.shrink();
   }
 }

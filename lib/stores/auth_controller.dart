@@ -16,6 +16,9 @@ abstract class AuthControllerBase with Store {
   @observable
   PlatformUser? platformUser;
 
+  @computed
+  bool get isAuthenticated => platformUser != null;
+
   @action
   void setPlatformUser(PlatformUser? user) => platformUser = user;
 

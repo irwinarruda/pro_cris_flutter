@@ -8,19 +8,21 @@ import 'package:pro_cris_flutter/styles/pro_cris_font_sizes.dart';
 class StudentCard extends StatelessWidget {
   StudentCard({
     super.key,
-    String? mainText,
-    String? secondaryText,
+    String? name,
+    String? nameCaregiver,
     Color? color,
+    this.avatar,
     this.onPressed,
     this.onConfigPressed,
   }) {
-    this.mainText = mainText ?? '';
-    this.secondaryText = secondaryText ?? '';
+    this.name = name ?? '';
+    this.nameCaregiver = nameCaregiver ?? '';
     this.color = color ?? ProCrisColors.white;
   }
 
-  String? mainText;
-  String? secondaryText;
+  String? name;
+  String? nameCaregiver;
+  String? avatar;
   Color? color;
   void Function()? onPressed;
   void Function()? onConfigPressed;
@@ -59,12 +61,10 @@ class StudentCard extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Image(
-                    image: true
+                    image: avatar == null
                         ? AssetImage('assets/icons/emoji-placeholder.png')
                             as dynamic
-                        : NetworkImage(
-                            'https://firebasestorage.googleapis.com/v0/b/pro-cris-app.appspot.com/o/a6f1c6c8-0c9d-4ad0-8a88-74878e236f4c?alt=media&token=74144085-7a23-495b-b8ac-78cfa84caf9a',
-                          ) as dynamic,
+                        : NetworkImage(avatar!) as dynamic,
                   ),
                 ),
               ),
@@ -83,7 +83,7 @@ class StudentCard extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            'Manchinha Arruda',
+                            name!,
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontSize: ProCrisFontSizes.fontMd,
@@ -101,7 +101,7 @@ class StudentCard extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            'Cristiani Arruda ',
+                            nameCaregiver!,
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontSize: ProCrisFontSizes.fontSm,

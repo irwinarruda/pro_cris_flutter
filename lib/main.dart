@@ -14,6 +14,8 @@ import 'package:pro_cris_flutter/screens/sign_up.dart';
 import 'package:pro_cris_flutter/screens/appointments_students_list.dart';
 import 'package:pro_cris_flutter/screens/students_management.dart';
 
+import 'package:pro_cris_flutter/router/pro_cris_router.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -40,21 +42,49 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
+        print(
+          '_authController.isAuthenticated: ${_authController.isAuthenticated}',
+        );
         return MaterialApp(
           title: 'Pro Cris App',
           theme: ProCrisTheme.theme,
-          initialRoute: _authController.platformUser != null
-              ? 'appointments_students_list'
-              : '/sign_in',
           supportedLocales: [Locale('pt'), Locale('en')],
-          routes: {
-            '/sign_in': (context) => SignIn(),
-            '/sign_up': (context) => SignUp(),
-            '/appointments_students_list': (context) =>
-                AppointmentsStudentsList(),
-            '/students_management': (context) => StudentsManagement(),
-          },
+          onGenerateRoute: (settings) => ProCrisRouter.generateRoute(
+            settings: settings,
+            authController: _authController,
+          ),
+          initialRoute: '/sign_in',
         );
+      },
+    );
+  }
+}
+
+class UnAuthScreens extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Pro Cris App',
+      theme: ProCrisTheme.theme,
+      initialRoute: '/sign_in',
+      routes: {
+        '/sign_in': (context) => SignIn(),
+        '/sign_up': (context) => SignUp(),
+      },
+    );
+  }
+}
+
+class AuthScreens extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Pro Cris App',
+      theme: ProCrisTheme.theme,
+      initialRoute: 'appointments_students_list',
+      routes: {
+        '/appointments_students_list': (context) => AppointmentsStudentsList(),
+        '/students_management': (context) => StudentsManagement(),
       },
     );
   }

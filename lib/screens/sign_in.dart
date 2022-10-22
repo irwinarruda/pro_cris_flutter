@@ -12,14 +12,34 @@ import 'package:pro_cris_flutter/components/templates/pro_cris_banner.dart';
 
 import 'package:pro_cris_flutter/stores/auth_controller.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
+  @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
   final _authController = AuthController();
+
   final GlobalKey<FormBuilderState> _globalKey = GlobalKey<FormBuilderState>();
 
   final initialValue = {
     'email': '',
     'password': '',
   };
+
+  Future<void> onSignIn() async {
+    final navigator = Navigator.of(context);
+    if (_globalKey.currentState!.validate()) {
+      _globalKey.currentState!.save();
+      await _authController.signIn(
+        email: _globalKey.currentState!.value['email'],
+        password: _globalKey.currentState!.value['password'],
+      );
+      navigator.pushReplacementNamed(
+        '/appointments_students_list',
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,21 +101,7 @@ class SignIn extends StatelessWidget {
                         Button.sizeLg(
                           title: 'Fazer Login',
                           alignment: Alignment.center,
-                          onPressed: () async {
-                            _globalKey.currentState!.validate();
-                            _globalKey.currentState!.save();
-                            print(_globalKey.currentState!.value['email']);
-                            await _authController.signIn(
-                              email: _globalKey.currentState!.value['email'],
-                              password:
-                                  _globalKey.currentState!.value['password'],
-                            );
-                            // ignore: use_build_context_synchronously
-                            Navigator.pushReplacementNamed(
-                              context,
-                              '/appointments_students_list',
-                            );
-                          },
+                          onPressed: onSignIn,
                         ),
                         SizedBox(height: 6),
                         Link(

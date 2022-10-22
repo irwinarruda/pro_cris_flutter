@@ -4,11 +4,17 @@ import 'package:pro_cris_flutter/entities/platform_user.dart';
 
 class AuthService {
   static final AuthService _instance = AuthService();
-  static getInstance() => _instance;
+  static AuthService getInstance() => _instance;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  PlatformUser _platformUserFromFirebase(User user) {
+  PlatformUser? get currentPlatformUser =>
+      _platformUserFromFirebase(_auth.currentUser!);
+
+  PlatformUser? _platformUserFromFirebase(User? user) {
+    if (user == null) {
+      return null;
+    }
     return PlatformUser(
       id: user.uid,
       name: user.displayName ?? '',
@@ -20,11 +26,7 @@ class AuthService {
 
   void listenToPlatformUserChange(void Function(PlatformUser?) callback) {
     _auth.authStateChanges().listen((user) {
-      if (user != null) {
-        callback(_platformUserFromFirebase(user));
-      } else {
-        callback(null);
-      }
+      callback(_platformUserFromFirebase(user));
     });
   }
 
