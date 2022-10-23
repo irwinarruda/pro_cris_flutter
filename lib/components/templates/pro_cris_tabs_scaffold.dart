@@ -120,6 +120,7 @@ class ProCrisTabsScaffold extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             elevation: 2,
+            automaticallyImplyLeading: false,
             toolbarHeight: 62,
             title: ProCrisLogo(height: 26),
             actions: [

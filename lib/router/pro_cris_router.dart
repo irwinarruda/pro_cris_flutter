@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pro_cris_flutter/stores/auth_controller.dart';
 
 import 'package:pro_cris_flutter/screens/sign_in.dart';
 import 'package:pro_cris_flutter/screens/sign_up.dart';
@@ -16,12 +15,26 @@ class ProCrisRouteNames {
 class ProCrisRouter {
   static Route<dynamic> generateRoute({
     required RouteSettings settings,
-    required AuthController authController,
+    required bool isAuthenticated,
   }) {
-    if (!authController.isAuthenticated) {
+    if (!isAuthenticated) {
       return getUnAuthenticatedRoutes(settings);
     } else {
       return getAuthenticatedRoutes(settings);
+    }
+  }
+
+  static Route<dynamic> generateInitialRoute({
+    required bool isAuthenticated,
+  }) {
+    if (!isAuthenticated) {
+      return MaterialPageRoute(
+        builder: (context) => SignIn(),
+      );
+    } else {
+      return MaterialPageRoute(
+        builder: (context) => AppointmentsStudentsList(),
+      );
     }
   }
 

@@ -35,6 +35,7 @@ dependencies:
   form_builder_validators:
   image_picker:
   antdesign_icons:
+  provider:
   flutter_dotenv:
   flutter:
     sdk: flutter
