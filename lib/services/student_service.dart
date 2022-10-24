@@ -15,6 +15,7 @@ class StudentService {
     bool hasAppointments = false,
   }) async {
     if (_authService.currentPlatformUser == null) {
+      // Maybe throw an error
       return null;
     }
     final studentColl = _firestore
@@ -47,7 +48,48 @@ class StudentService {
     return students.where((student) => !student.isDeleted).toList();
   }
 
-  Future<List<Map<String, dynamic>>> getCollectionJsonList<T>(
+  Future<Student?> listStudentById(
+    String studentId, {
+    bool hasSchedules = false,
+    bool hasAppointments = false,
+    bool hasCosts = false,
+  }) async {
+    if (_authService.currentPlatformUser == null) {
+      // Maybe throw an error
+      return null;
+    }
+
+    final studentDocPath = _firestore
+        .collection('users')
+        .doc(_authService.currentPlatformUser!.id)
+        .collection('students')
+        .doc(studentId);
+
+    final studentDoc = await studentDocPath.get();
+    if (!studentDoc.exists) {
+      // Maybe throw an error
+      return null;
+    }
+
+    final mapObj = {'id': studentDoc.id, ...?studentDoc.data()};
+
+    if (hasCosts) {
+      final costs = await getCollectionJsonList(
+        studentDoc.reference.collection('costs'),
+      );
+      mapObj['costs'] = costs;
+    }
+    if (hasSchedules) {
+      final schedules = await getCollectionJsonList(
+        studentDoc.reference.collection('schedules'),
+      );
+      mapObj['schedules'] = schedules;
+    }
+
+    return Student.fromJson(mapObj);
+  }
+
+  Future<List<Map<String, dynamic>>> getCollectionJsonList(
     CollectionReference<Map<String, dynamic>> ref,
   ) async {
     final snapshot = await ref.get();

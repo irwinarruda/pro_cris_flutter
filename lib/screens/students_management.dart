@@ -15,8 +15,14 @@ import 'package:pro_cris_flutter/components/templates/pro_cris_header_scaffold.d
 import 'package:pro_cris_flutter/styles/pro_cris_colors.dart';
 import 'package:pro_cris_flutter/styles/pro_cris_font_sizes.dart';
 
-class StudentsManagement extends StatelessWidget {
+class StudentsManagement extends StatefulWidget {
+  @override
+  State<StudentsManagement> createState() => _StudentsManagementState();
+}
+
+class _StudentsManagementState extends State<StudentsManagement> {
   GlobalKey<FormBuilderState> globalKey = GlobalKey<FormBuilderState>();
+
   final initialValue = {
     'name': '',
     'avatar': '',

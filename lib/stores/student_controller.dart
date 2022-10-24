@@ -17,15 +17,29 @@ abstract class StudentControllerBase with Store {
   ObservableList<Student> students = ObservableList.of([]);
 
   @observable
+  Student? selectedStudent;
+
+  @observable
+  bool isEditingStudentLoading = false;
+
+  @observable
   bool isModalBillingOpen = false;
 
+  @computed
+  bool get isEditingStudent => selectedStudent != null;
+
   @action
-  void onModalBillingOpen() {
+  void setIsEditingStudentLoading(bool value) {
+    isEditingStudentLoading = value;
+  }
+
+  @action
+  void onModalBillinigOpen() {
     isModalBillingOpen = true;
   }
 
   @action
-  void onModalBillingClose() {
+  void onModalBillinigClose() {
     isModalBillingOpen = false;
   }
 
@@ -34,6 +48,14 @@ abstract class StudentControllerBase with Store {
     final studentsList = await _studentService.listStudents();
     if (studentsList != null) {
       students = studentsList.asObservable();
+    }
+  }
+
+  @action
+  Future<void> listStudentById(String studentId) async {
+    final student = await _studentService.listStudentById(studentId);
+    if (student != null) {
+      selectedStudent = student;
     }
   }
 }
