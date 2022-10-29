@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import 'package:pro_cris_flutter/components/atoms/button.dart';
 import 'package:pro_cris_flutter/components/atoms/dismiss_keyboard.dart';
@@ -34,6 +35,15 @@ class _StudentsManagementState extends State<StudentsManagement> {
     'observation': '',
     'color': 'black',
   };
+
+  @override
+  void initState() {
+    super.initState();
+    context.loaderOverlay.show();
+    Future.delayed(Duration(seconds: 8)).then(
+      (_) => context.loaderOverlay.hide(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
