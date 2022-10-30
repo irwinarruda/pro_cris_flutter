@@ -12,6 +12,7 @@ import 'package:pro_cris_flutter/components/molecules/builder_form_color.dart';
 import 'package:pro_cris_flutter/components/molecules/builder_form_mask.dart';
 import 'package:pro_cris_flutter/components/molecules/manage_card.dart';
 import 'package:pro_cris_flutter/components/templates/pro_cris_header_scaffold.dart';
+import 'package:pro_cris_flutter/providers/pro_cris_provider.dart';
 
 import 'package:pro_cris_flutter/styles/pro_cris_colors.dart';
 import 'package:pro_cris_flutter/styles/pro_cris_font_sizes.dart';
@@ -33,22 +34,49 @@ class _StudentsManagementState extends State<StudentsManagement> {
     'name_caregiver': '',
     'map_location': '',
     'observation': '',
-    'color': 'black',
+    'color': ProCrisColors.custom['black'],
   };
+
+  void onGoBack() {
+    final studentController = ProCrisProvider.useStudent(context);
+    studentController.resetStudentId();
+  }
+
+  Future<void> onManageStudent() async {
+    final studentController = ProCrisProvider.useStudent(context);
+    try {
+      context.loaderOverlay.show();
+      await studentController.getManageStudent();
+      globalKey.currentState!.patchValue({
+        'name': studentController.student!.name,
+        'avatar': studentController.student!.avatar ?? '',
+        'date_of_birth': studentController.student!.dateOfBirth,
+        'phone': studentController.student!.phone,
+        'address': studentController.student!.address,
+        'name_caregiver': studentController.student!.nameCaregiver,
+        'map_location': studentController.student!.mapLocation,
+        'observation': studentController.student!.observation,
+        'color': ProCrisColors.fromHex(studentController.student!.color),
+      });
+    } finally {
+      context.loaderOverlay.hide();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    context.loaderOverlay.show();
-    Future.delayed(Duration(seconds: 8)).then(
-      (_) => context.loaderOverlay.hide(),
-    );
+    final studentController = ProCrisProvider.useStudent(context);
+    if (studentController.studentId != null) {
+      onManageStudent();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return ProCrisHeaderScaffold(
       title: 'Criar Aluno',
+      onPressed: onGoBack,
       body: FormBuilder(
         key: globalKey,
         initialValue: initialValue,

@@ -63,12 +63,12 @@ class ColorsField extends StatelessWidget {
 
   ColorsFieldSizes? size;
   String? label;
-  String? value;
-  void Function(String key)? onChanged;
+  Color? value;
+  void Function(Color key)? onChanged;
 
   Widget _buildColorPopup() {
     return Material(
-      color: ProCrisColors.custom[value],
+      color: value,
       borderRadius: BorderRadius.circular(1000),
       child: PopupMenuButton(
         initialValue: 'colors_field',
@@ -106,13 +106,13 @@ class ColorsField extends StatelessWidget {
                         height: 36,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(1000),
-                          color: ProCrisColors.custom[color.key],
+                          color: color.value,
                         ),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(1000),
                           onTap: () {
                             Navigator.pop(context, 'colors_field');
-                            onChanged!(color.key);
+                            onChanged!(color.value);
                           },
                         ),
                       ),

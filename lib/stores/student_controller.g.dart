@@ -9,14 +9,6 @@ part of 'student_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$StudentController on StudentControllerBase, Store {
-  Computed<bool>? _$isEditingStudentComputed;
-
-  @override
-  bool get isEditingStudent => (_$isEditingStudentComputed ??= Computed<bool>(
-          () => super.isEditingStudent,
-          name: 'StudentControllerBase.isEditingStudent'))
-      .value;
-
   late final _$studentsAtom =
       Atom(name: 'StudentControllerBase.students', context: context);
 
@@ -33,52 +25,35 @@ mixin _$StudentController on StudentControllerBase, Store {
     });
   }
 
-  late final _$selectedStudentAtom =
-      Atom(name: 'StudentControllerBase.selectedStudent', context: context);
+  late final _$studentIdAtom =
+      Atom(name: 'StudentControllerBase.studentId', context: context);
 
   @override
-  Student? get selectedStudent {
-    _$selectedStudentAtom.reportRead();
-    return super.selectedStudent;
+  String? get studentId {
+    _$studentIdAtom.reportRead();
+    return super.studentId;
   }
 
   @override
-  set selectedStudent(Student? value) {
-    _$selectedStudentAtom.reportWrite(value, super.selectedStudent, () {
-      super.selectedStudent = value;
+  set studentId(String? value) {
+    _$studentIdAtom.reportWrite(value, super.studentId, () {
+      super.studentId = value;
     });
   }
 
-  late final _$isEditingStudentLoadingAtom = Atom(
-      name: 'StudentControllerBase.isEditingStudentLoading', context: context);
+  late final _$studentAtom =
+      Atom(name: 'StudentControllerBase.student', context: context);
 
   @override
-  bool get isEditingStudentLoading {
-    _$isEditingStudentLoadingAtom.reportRead();
-    return super.isEditingStudentLoading;
+  Student? get student {
+    _$studentAtom.reportRead();
+    return super.student;
   }
 
   @override
-  set isEditingStudentLoading(bool value) {
-    _$isEditingStudentLoadingAtom
-        .reportWrite(value, super.isEditingStudentLoading, () {
-      super.isEditingStudentLoading = value;
-    });
-  }
-
-  late final _$isModalBillingOpenAtom =
-      Atom(name: 'StudentControllerBase.isModalBillingOpen', context: context);
-
-  @override
-  bool get isModalBillingOpen {
-    _$isModalBillingOpenAtom.reportRead();
-    return super.isModalBillingOpen;
-  }
-
-  @override
-  set isModalBillingOpen(bool value) {
-    _$isModalBillingOpenAtom.reportWrite(value, super.isModalBillingOpen, () {
-      super.isModalBillingOpen = value;
+  set student(Student? value) {
+    _$studentAtom.reportWrite(value, super.student, () {
+      super.student = value;
     });
   }
 
@@ -90,46 +65,34 @@ mixin _$StudentController on StudentControllerBase, Store {
     return _$listStudentsAsyncAction.run(() => super.listStudents());
   }
 
-  late final _$listStudentByIdAsyncAction =
-      AsyncAction('StudentControllerBase.listStudentById', context: context);
+  late final _$getManageStudentAsyncAction =
+      AsyncAction('StudentControllerBase.getManageStudent', context: context);
 
   @override
-  Future<void> listStudentById(String studentId) {
-    return _$listStudentByIdAsyncAction
-        .run(() => super.listStudentById(studentId));
+  Future<void> getManageStudent() {
+    return _$getManageStudentAsyncAction.run(() => super.getManageStudent());
   }
 
   late final _$StudentControllerBaseActionController =
       ActionController(name: 'StudentControllerBase', context: context);
 
   @override
-  void setIsEditingStudentLoading(bool value) {
+  void setStudentId(String id) {
     final _$actionInfo = _$StudentControllerBaseActionController.startAction(
-        name: 'StudentControllerBase.setIsEditingStudentLoading');
+        name: 'StudentControllerBase.setStudentId');
     try {
-      return super.setIsEditingStudentLoading(value);
+      return super.setStudentId(id);
     } finally {
       _$StudentControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void onModalBillinigOpen() {
+  void resetStudentId() {
     final _$actionInfo = _$StudentControllerBaseActionController.startAction(
-        name: 'StudentControllerBase.onModalBillinigOpen');
+        name: 'StudentControllerBase.resetStudentId');
     try {
-      return super.onModalBillinigOpen();
-    } finally {
-      _$StudentControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void onModalBillinigClose() {
-    final _$actionInfo = _$StudentControllerBaseActionController.startAction(
-        name: 'StudentControllerBase.onModalBillinigClose');
-    try {
-      return super.onModalBillinigClose();
+      return super.resetStudentId();
     } finally {
       _$StudentControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -139,10 +102,8 @@ mixin _$StudentController on StudentControllerBase, Store {
   String toString() {
     return '''
 students: ${students},
-selectedStudent: ${selectedStudent},
-isEditingStudentLoading: ${isEditingStudentLoading},
-isModalBillingOpen: ${isModalBillingOpen},
-isEditingStudent: ${isEditingStudent}
+studentId: ${studentId},
+student: ${student}
     ''';
   }
 }

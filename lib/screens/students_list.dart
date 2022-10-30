@@ -24,6 +24,11 @@ class _StudentsListState extends State<StudentsList> {
     await studentController.listStudents();
   }
 
+  void onSelectStudent(String id) {
+    final studentController = ProCrisProvider.useStudent(context);
+    studentController.setStudentId(id);
+  }
+
   @override
   initState() {
     super.initState();
@@ -32,7 +37,6 @@ class _StudentsListState extends State<StudentsList> {
 
   @override
   Widget build(BuildContext context) {
-    final studentController = ProCrisProvider.useStudent(context);
     return Stack(
       children: [
         Container(
@@ -60,38 +64,44 @@ class _StudentsListState extends State<StudentsList> {
                     color: ProCrisColors.gold,
                     onRefresh: onRefreshStudents,
                     child: Observer(
-                      builder: (context) => ListView(
-                        padding: EdgeInsets.only(top: 10, left: 16, right: 16),
-                        scrollDirection: Axis.vertical,
-                        children: [
-                          for (var index = 0;
-                              index < studentController.students.length;
-                              index++) ...[
-                            if (index != 0) SizedBox(height: 10),
-                            StudentCard(
-                              color: ProCrisColors.fromHex(
-                                studentController.students[index].color,
+                      builder: (context) {
+                        final students =
+                            ProCrisProvider.useStudent(context).students;
+                        return ListView(
+                          padding:
+                              EdgeInsets.only(top: 10, left: 16, right: 16),
+                          scrollDirection: Axis.vertical,
+                          children: [
+                            for (var index = 0;
+                                index < students.length;
+                                index++) ...[
+                              if (index != 0) SizedBox(height: 10),
+                              StudentCard(
+                                color: ProCrisColors.fromHex(
+                                  students[index].color,
+                                ),
+                                name: students[index].name,
+                                nameCaregiver: students[index].nameCaregiver,
+                                avatar: students[index].avatar,
+                                onPressed: () {
+                                  onSelectStudent(students[index].id);
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => ModalSummary(),
+                                  );
+                                },
+                                onConfigPressed: () {
+                                  onSelectStudent(students[index].id);
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/students_management',
+                                  );
+                                },
                               ),
-                              name: studentController.students[index].name,
-                              nameCaregiver: studentController
-                                  .students[index].nameCaregiver,
-                              avatar: studentController.students[index].avatar,
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => ModalSummary(),
-                                );
-                              },
-                              onConfigPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/students_management',
-                                );
-                              },
-                            ),
+                            ],
                           ],
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ),
                 ),

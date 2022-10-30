@@ -80,7 +80,7 @@ class BuilderFormColor extends StatelessWidget {
       name: name,
       builder: (FormFieldState<dynamic> field) => ColorsField(
         value: field.value,
-        onChanged: (String value) {
+        onChanged: (Color value) {
           field.didChange(value);
         },
         label: label,

@@ -157,7 +157,7 @@ class BuilderFormMask extends StatelessWidget {
         MaskTextInputFormatter(
           mask: mask,
           filter: {"#": RegExp(r'[0-9]')},
-          type: MaskAutoCompletionType.lazy,
+          type: MaskAutoCompletionType.eager,
         )
       ],
       style: TextStyle(
