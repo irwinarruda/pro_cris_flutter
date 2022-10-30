@@ -49,8 +49,18 @@ class Student {
       observation: json['observation'],
       color: json['color'],
       isDeleted: json['is_deleted'],
-      schedules: json['schedules'],
-      costs: json['costs'],
+      schedules: json['schedules'] != null
+          ? List.from(json['schedules'])
+              .toList()
+              .map((e) => Schedule.fromJson(e))
+              .toList()
+          : null,
+      costs: json['costs'] != null
+          ? List.from(json['costs'])
+              .toList()
+              .map((e) => Cost.fromJson(e))
+              .toList()
+          : null,
       // appointments: json['appointments'],
     );
   }

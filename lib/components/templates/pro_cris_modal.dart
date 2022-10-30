@@ -41,26 +41,36 @@ class ProCrisModal extends StatelessWidget {
 }
 
 class ProCrisModalHeader extends StatelessWidget {
-  ProCrisModalHeader({super.key, required this.title});
+  ProCrisModalHeader({
+    super.key,
+    required this.title,
+    this.transparentBackground = false,
+  });
 
   String title;
+  bool transparentBackground;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-        color: ProCrisColors.purple,
+        color:
+            transparentBackground ? Colors.transparent : ProCrisColors.purple,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8),
           topRight: Radius.circular(8),
         ),
+        border: transparentBackground
+            ? Border.all(color: ProCrisColors.gray[100]!, width: 1)
+            : null,
       ),
       child: Text(
         title,
         style: TextStyle(
-          color: ProCrisColors.white,
+          color:
+              transparentBackground ? ProCrisColors.black : ProCrisColors.white,
           fontSize: ProCrisFontSizes.fontLg,
           fontWeight: FontWeight.w700,
         ),

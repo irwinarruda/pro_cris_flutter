@@ -12,6 +12,7 @@ import 'package:pro_cris_flutter/components/molecules/builder_form_color.dart';
 import 'package:pro_cris_flutter/components/molecules/builder_form_mask.dart';
 import 'package:pro_cris_flutter/components/molecules/manage_card.dart';
 import 'package:pro_cris_flutter/components/templates/pro_cris_header_scaffold.dart';
+import 'package:pro_cris_flutter/providers/pro_cris_alert.dart';
 import 'package:pro_cris_flutter/providers/pro_cris_provider.dart';
 
 import 'package:pro_cris_flutter/styles/pro_cris_colors.dart';
@@ -60,6 +61,14 @@ class _StudentsManagementState extends State<StudentsManagement> {
       });
     } finally {
       context.loaderOverlay.hide();
+      final result = await ProCrisAlert.show(
+        context: context,
+        title: 'Teste',
+        content: 'Teste para ver o que retorna',
+        confirmText: 'Confirmar',
+        cancelText: 'Cancelar',
+      );
+      print(result.isConfirmed);
     }
   }
 
@@ -92,6 +101,18 @@ class _StudentsManagementState extends State<StudentsManagement> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Button(
+                  title: 'Alertar',
+                  onPressed: () async {
+                    final result = await ProCrisAlert.show(
+                      context: context,
+                      title: 'Deseja remover esse Valor?',
+                      content: 'Essa ação removerá o custo e é irreversível.',
+                      confirmText: 'Confirmar',
+                      cancelText: 'Cancelar',
+                    );
+                  },
+                ),
                 Row(
                   children: [
                     Expanded(
