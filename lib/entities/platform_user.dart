@@ -1,11 +1,11 @@
-class PlatformUser {
+class ProCrisUser {
   String id;
   String? name;
   String email;
   String? phone;
   String? avatar;
 
-  PlatformUser({
+  ProCrisUser({
     required this.id,
     required this.name,
     required this.email,
@@ -13,8 +13,8 @@ class PlatformUser {
     required this.avatar,
   });
 
-  factory PlatformUser.fromJson(Map<String, dynamic> json) {
-    return PlatformUser(
+  factory ProCrisUser.fromJson(Map<String, dynamic> json) {
+    return ProCrisUser(
       id: json['id'],
       name: json['name'],
       email: json['email'],

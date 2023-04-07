@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'package:pro_cris_flutter/components/atoms/button.dart';
@@ -101,18 +102,6 @@ class _StudentsManagementState extends State<StudentsManagement> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Button(
-                  title: 'Alertar',
-                  onPressed: () async {
-                    final result = await ProCrisAlert.show(
-                      context: context,
-                      title: 'Deseja remover esse Valor?',
-                      content: 'Essa ação removerá o custo e é irreversível.',
-                      confirmText: 'Confirmar',
-                      cancelText: 'Cancelar',
-                    );
-                  },
-                ),
                 Row(
                   children: [
                     Expanded(
@@ -250,13 +239,31 @@ class _StudentsManagementState extends State<StudentsManagement> {
   }
 }
 
-class ModalManageCosts extends StatelessWidget {
+class ModalManageCosts extends StatefulWidget {
+  @override
+  State<ModalManageCosts> createState() => _ModalManageCostsState();
+}
+
+class _ModalManageCostsState extends State<ModalManageCosts> {
   GlobalKey<FormBuilderState> globalKey = GlobalKey<FormBuilderState>();
 
   final initialValue = {
     'time': '',
     'price': '',
   };
+
+  Future<void> onDeleteCost(String id) async {
+    final result = await ProCrisAlert.show(
+      context: context,
+      title: 'Deseja remover esse Valor?',
+      content: 'Essa ação removerá o custo e é irreversível',
+      cancelText: 'Cancelar',
+      confirmText: 'Remover',
+    );
+    if (result.isConfirmed) {
+      final studentController = ProCrisProvider.useStudent(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -333,18 +340,27 @@ class ModalManageCosts extends StatelessWidget {
               Divider(thickness: 2, color: ProCrisColors.gold),
               SizedBox(height: 10),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ManageCard(
-                        mainText: 'Hora Aula: 01:00',
-                        secondaryText: 'Preço: R\$2.00',
-                        onDeletePressed: () {},
-                      ),
-                    ],
-                  ),
+                child: Observer(
+                  builder: (context) {
+                    final studentController =
+                        ProCrisProvider.useStudent(context);
+                    final costs = studentController.student?.costs ?? [];
+                    return ListView(
+                      children: [
+                        for (var index = 0; index < costs.length; index++) ...[
+                          if (index != 0)
+                            SizedBox(
+                              height: 3,
+                            ),
+                          ManageCard(
+                            title: 'Hora Aula: ${costs[index].time}',
+                            description: 'Preço ${costs[index].price}',
+                            onDeletePressed: () {},
+                          ),
+                        ],
+                      ],
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 10),
@@ -445,8 +461,8 @@ class ModalManageSchedules extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       ManageCard(
-                        mainText: 'Dia da semana: Terça',
-                        secondaryText: 'Hora do dia: 08:00',
+                        title: 'Dia da semana: Terça',
+                        description: 'Hora do dia: 08:00',
                         onDeletePressed: () {},
                       ),
                     ],

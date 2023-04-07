@@ -14,13 +14,13 @@ class StudentService {
     bool hasCosts = false,
     bool hasAppointments = false,
   }) async {
-    if (_authService.currentPlatformUser == null) {
+    if (_authService.currentProCrisUser == null) {
       // Maybe throw an error
       return null;
     }
     final studentColl = _firestore
         .collection('users')
-        .doc(_authService.currentPlatformUser!.id)
+        .doc(_authService.currentProCrisUser!.id)
         .collection('students');
 
     List<Student> students = [];
@@ -54,14 +54,14 @@ class StudentService {
     bool hasAppointments = false,
     bool hasCosts = false,
   }) async {
-    if (_authService.currentPlatformUser == null) {
+    if (_authService.currentProCrisUser == null) {
       // Maybe throw an error
       return null;
     }
 
     final studentDocPath = _firestore
         .collection('users')
-        .doc(_authService.currentPlatformUser!.id)
+        .doc(_authService.currentProCrisUser!.id)
         .collection('students')
         .doc(studentId);
 

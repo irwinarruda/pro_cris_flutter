@@ -14,6 +14,7 @@ import 'package:pro_cris_flutter/styles/pro_cris_theme.dart';
 import 'package:pro_cris_flutter/router/pro_cris_router.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'components/atoms/pro_cris_logo.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -30,6 +31,26 @@ Future<void> main() async {
   );
 }
 
+class Splash extends StatelessWidget {
+  const Splash({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: ProCrisColors.purple,
+      height: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ProCrisLogo(),
+          Text('Irwin Arruda'),
+        ],
+      ),
+    );
+  }
+}
+
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
@@ -38,17 +59,20 @@ class MyApp extends StatelessWidget {
     return Observer(
       builder: (context) {
         final authController = ProCrisProvider.useAuth(context);
+        var showSplash = authController.showSplash;
+        var isAuthenticated = authController.isAuthenticated;
+        if (showSplash) {
+          return Splash();
+        }
+        print("I HAVE ARRIVED HERE ${authController.isAuthenticated}");
         return MaterialApp(
           title: 'Pro Cris App',
           theme: ProCrisTheme.theme,
-          supportedLocales: [Locale('pt'), Locale('en')],
           onGenerateRoute: (settings) => ProCrisRouter.generateRoute(
             settings: settings,
-            isAuthenticated: authController.isAuthenticated,
+            isAuthenticated: isAuthenticated,
           ),
-          initialRoute: !authController.isAuthenticated
-              ? ProCrisRouteNames.signIn
-              : ProCrisRouteNames.home,
+          initialRoute: ProCrisRouteNames.signIn,
         );
       },
     );

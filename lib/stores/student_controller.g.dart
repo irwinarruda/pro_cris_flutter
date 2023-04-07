@@ -73,6 +73,15 @@ mixin _$StudentController on StudentControllerBase, Store {
     return _$getManageStudentAsyncAction.run(() => super.getManageStudent());
   }
 
+  late final _$deleteStudentConstAsyncAction =
+      AsyncAction('StudentControllerBase.deleteStudentConst', context: context);
+
+  @override
+  Future<void> deleteStudentConst(String id) {
+    return _$deleteStudentConstAsyncAction
+        .run(() => super.deleteStudentConst(id));
+  }
+
   late final _$StudentControllerBaseActionController =
       ActionController(name: 'StudentControllerBase', context: context);
 

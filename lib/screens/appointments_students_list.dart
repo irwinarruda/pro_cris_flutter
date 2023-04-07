@@ -21,7 +21,7 @@ class _AppointmentsStudentsListState extends State<AppointmentsStudentsList> {
   Future<void> onSignOut() async {
     final navigator = Navigator.of(context);
     await _authController.signOut();
-    navigator.pushReplacementNamed('/sign_in');
+    navigator.pushNamedAndRemoveUntil('/sign_in', (route) => false);
   }
 
   @override

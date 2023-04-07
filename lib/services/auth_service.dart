@@ -8,14 +8,14 @@ class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  PlatformUser? get currentPlatformUser =>
-      _platformUserFromFirebase(_auth.currentUser!);
+  ProCrisUser? get currentProCrisUser =>
+      _proCrisUserFromFirebase(_auth.currentUser!);
 
-  PlatformUser? _platformUserFromFirebase(User? user) {
+  ProCrisUser? _proCrisUserFromFirebase(User? user) {
     if (user == null) {
       return null;
     }
-    return PlatformUser(
+    return ProCrisUser(
       id: user.uid,
       name: user.displayName ?? '',
       email: user.email ?? '',
@@ -24,21 +24,26 @@ class AuthService {
     );
   }
 
-  void listenToPlatformUserChange(void Function(PlatformUser?) callback) {
+  void onProCrisUserChange(void Function(ProCrisUser?) callback) {
     _auth.authStateChanges().listen((user) {
-      callback(_platformUserFromFirebase(user));
+      callback(_proCrisUserFromFirebase(user));
     });
   }
 
-  Future<void> signIn({required String email, required String password}) async {
+  Future<ProCrisUser?> signIn({
+    required String email,
+    required String password,
+  }) async {
     try {
-      await _auth.signInWithEmailAndPassword(
+      var userCredentials = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      return _proCrisUserFromFirebase(userCredentials.user);
     } catch (e) {
       print(e.toString());
     }
+    return null;
   }
 
   Future<void> signOut() async {

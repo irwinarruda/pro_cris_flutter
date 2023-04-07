@@ -17,19 +17,35 @@ mixin _$AuthController on AuthControllerBase, Store {
               name: 'AuthControllerBase.isAuthenticated'))
           .value;
 
-  late final _$platformUserAtom =
-      Atom(name: 'AuthControllerBase.platformUser', context: context);
+  late final _$proCrisUserAtom =
+      Atom(name: 'AuthControllerBase.proCrisUser', context: context);
 
   @override
-  PlatformUser? get platformUser {
-    _$platformUserAtom.reportRead();
-    return super.platformUser;
+  ProCrisUser? get proCrisUser {
+    _$proCrisUserAtom.reportRead();
+    return super.proCrisUser;
   }
 
   @override
-  set platformUser(PlatformUser? value) {
-    _$platformUserAtom.reportWrite(value, super.platformUser, () {
-      super.platformUser = value;
+  set proCrisUser(ProCrisUser? value) {
+    _$proCrisUserAtom.reportWrite(value, super.proCrisUser, () {
+      super.proCrisUser = value;
+    });
+  }
+
+  late final _$showSplashAtom =
+      Atom(name: 'AuthControllerBase.showSplash', context: context);
+
+  @override
+  bool get showSplash {
+    _$showSplashAtom.reportRead();
+    return super.showSplash;
+  }
+
+  @override
+  set showSplash(bool value) {
+    _$showSplashAtom.reportWrite(value, super.showSplash, () {
+      super.showSplash = value;
     });
   }
 
@@ -37,11 +53,11 @@ mixin _$AuthController on AuthControllerBase, Store {
       ActionController(name: 'AuthControllerBase', context: context);
 
   @override
-  void setPlatformUser(PlatformUser? user) {
+  void setProCrisUser(ProCrisUser? user) {
     final _$actionInfo = _$AuthControllerBaseActionController.startAction(
-        name: 'AuthControllerBase.setPlatformUser');
+        name: 'AuthControllerBase.setProCrisUser');
     try {
-      return super.setPlatformUser(user);
+      return super.setProCrisUser(user);
     } finally {
       _$AuthControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -50,7 +66,8 @@ mixin _$AuthController on AuthControllerBase, Store {
   @override
   String toString() {
     return '''
-platformUser: ${platformUser},
+proCrisUser: ${proCrisUser},
+showSplash: ${showSplash},
 isAuthenticated: ${isAuthenticated}
     ''';
   }

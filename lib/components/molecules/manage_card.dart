@@ -6,16 +6,16 @@ import 'package:pro_cris_flutter/styles/pro_cris_colors.dart';
 class ManageCard extends StatelessWidget {
   ManageCard({
     super.key,
-    this.mainText,
-    this.secondaryText,
+    this.title,
+    this.description,
     required this.onDeletePressed,
   }) {
-    mainText = mainText ?? '';
-    secondaryText = secondaryText ?? '';
+    title = title ?? '';
+    description = description ?? '';
   }
 
-  String? mainText;
-  String? secondaryText;
+  String? title;
+  String? description;
   void Function() onDeletePressed;
 
   @override
@@ -36,11 +36,11 @@ class ManageCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$mainText',
+                  '$title',
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  '$secondaryText',
+                  '$description',
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
               ],

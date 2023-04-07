@@ -54,4 +54,7 @@ abstract class StudentControllerBase with Store {
       student = selected;
     }
   }
+
+  @action
+  Future<void> deleteStudentConst(String id) async {}
 }

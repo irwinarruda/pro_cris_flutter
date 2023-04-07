@@ -9,8 +9,7 @@ import 'package:pro_cris_flutter/components/atoms/link.dart';
 import 'package:pro_cris_flutter/components/molecules/builder_form_text.dart';
 import 'package:pro_cris_flutter/components/molecules/builder_form_password.dart';
 import 'package:pro_cris_flutter/components/templates/pro_cris_banner.dart';
-
-import 'package:pro_cris_flutter/stores/auth_controller.dart';
+import 'package:pro_cris_flutter/providers/pro_cris_provider.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -18,8 +17,6 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  final _authController = AuthController();
-
   final GlobalKey<FormBuilderState> _globalKey = GlobalKey<FormBuilderState>();
 
   final initialValue = {
@@ -28,15 +25,17 @@ class _SignInState extends State<SignIn> {
   };
 
   Future<void> onSignIn() async {
+    final authController = ProCrisProvider.useAuth(context);
     final navigator = Navigator.of(context);
     if (_globalKey.currentState!.validate()) {
       _globalKey.currentState!.save();
-      await _authController.signIn(
+      await authController.signIn(
         email: _globalKey.currentState!.value['email'],
         password: _globalKey.currentState!.value['password'],
       );
-      navigator.pushReplacementNamed(
+      navigator.pushNamedAndRemoveUntil(
         '/appointments_students_list',
+        (route) => false,
       );
     }
   }
