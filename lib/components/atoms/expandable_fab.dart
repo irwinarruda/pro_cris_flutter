@@ -48,6 +48,7 @@ class _ExpandableFabState extends State<ExpandableFab>
   }
 
   void _toggle() {
+    print('Called Toggle');
     setState(() {
       _open = !_open;
       if (_open) {
@@ -76,6 +77,14 @@ class _ExpandableFabState extends State<ExpandableFab>
             bottom: 30,
             child: _buildTapToOpenFab(),
           ),
+          if (_open)
+            InkWell(
+              onTap: _toggle,
+              child: SizedBox(
+                width: double.infinity,
+                height: double.infinity,
+              ),
+            ),
         ],
       ),
     );
@@ -93,7 +102,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           child: InkWell(
             onTap: _toggle,
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(12.0),
               child: Icon(
                 Icons.close,
                 color: Theme.of(context).primaryColor,

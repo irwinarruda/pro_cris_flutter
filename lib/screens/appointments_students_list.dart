@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pro_cris_flutter/components/atoms/appointments_icon.dart';
 import 'package:pro_cris_flutter/components/atoms/students_icon.dart';
 import 'package:pro_cris_flutter/components/templates/pro_cris_tabs_scaffold.dart';
+import 'package:pro_cris_flutter/router/pro_cris_router.dart';
 
 import 'package:pro_cris_flutter/screens/appointments_list.dart';
 import 'package:pro_cris_flutter/screens/students_list.dart';
@@ -21,7 +22,10 @@ class _AppointmentsStudentsListState extends State<AppointmentsStudentsList> {
   Future<void> onSignOut() async {
     final navigator = Navigator.of(context);
     await _authController.signOut();
-    navigator.pushNamedAndRemoveUntil('/sign_in', (route) => false);
+    navigator.pushNamedAndRemoveUntil(
+      ProCrisRouteNames.signIn,
+      (route) => false,
+    );
   }
 
   @override

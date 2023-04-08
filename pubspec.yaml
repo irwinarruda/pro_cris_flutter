@@ -105,5 +105,9 @@ flutter:
           weight: 600
         - asset: assets/fonts/Quicksand_Bold.ttf
           weight: 700
+    - family: Yellowtail
+      fonts:
+        - asset: assets/fonts/Yellowtail_Regular.ttf
+          weight: 400
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

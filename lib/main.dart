@@ -4,17 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
+import 'package:pro_cris_flutter/components/templates/pro_cris_splash.dart';
 import 'package:pro_cris_flutter/providers/pro_cris_provider.dart';
-
 import 'package:pro_cris_flutter/styles/pro_cris_colors.dart';
-
 import 'package:pro_cris_flutter/styles/pro_cris_theme.dart';
-
 import 'package:pro_cris_flutter/router/pro_cris_router.dart';
-
 import 'package:firebase_core/firebase_core.dart';
-import 'components/atoms/pro_cris_logo.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -31,26 +26,6 @@ Future<void> main() async {
   );
 }
 
-class Splash extends StatelessWidget {
-  const Splash({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: ProCrisColors.purple,
-      height: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ProCrisLogo(),
-          Text('Irwin Arruda'),
-        ],
-      ),
-    );
-  }
-}
-
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
@@ -62,9 +37,8 @@ class MyApp extends StatelessWidget {
         var showSplash = authController.showSplash;
         var isAuthenticated = authController.isAuthenticated;
         if (showSplash) {
-          return Splash();
+          return ProCrisSplash();
         }
-        print("I HAVE ARRIVED HERE ${authController.isAuthenticated}");
         return MaterialApp(
           title: 'Pro Cris App',
           theme: ProCrisTheme.theme,

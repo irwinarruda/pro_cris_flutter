@@ -17,6 +17,7 @@ class AppointmentsList extends StatelessWidget {
     return Stack(
       children: [
         Container(
+          height: MediaQuery.of(context).size.height,
           color: ProCrisColors.white,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -111,7 +112,7 @@ class AppointmentsList extends StatelessWidget {
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }
